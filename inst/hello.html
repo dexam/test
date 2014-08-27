@@ -1,0 +1,78 @@
+!DOCTYPE html
+html
+  head
+    titleHellotitle
+    
+    !-- Include order first jquery, then opencpu.js, and then your code --
+    script src=opencpujquery-1.10.1.min.jsscript
+    script src=opencpuopencpu.jsscript
+    script
+    init this script when the page has loaded
+    $(document).ready(function(){
+      $(#submitbutton).on(click, function(){
+        disable the button to prevent multiple clicks
+        $(#submitbutton).attr(disabled, disabled);
+        
+        read the value for 'myname'
+        var myname = $(#namefield).val();
+        
+        perform the request
+        var req = opencpu.r_fun_json(hello, {
+          myname  myname
+        }, function(output){
+          $(#output).text(output.message);
+        });
+        
+        if R returns an error, alert the error message
+        req.fail(function(){
+          alert(Server error  + req.responseText);
+        });
+        
+        after request complete, re-enable the button 
+        req.always(function(){
+          $(#submitbutton).removeAttr(disabled)
+        });
+      });
+
+      this is only needed when using CORS (i.e. web pages hosted outside opencpu)
+      if(!location.pathname.match(^ocpu.appdemowww)){
+        opencpu.seturl(public.opencpu.orgocpulibraryappdemoR);
+      }
+    });
+    script
+    
+    style
+      #output{
+        height 80px;
+        width 500px;
+        border 1px solid gray;
+        padding 3px;
+      }
+    style
+    
+  head
+    
+  body
+    h1Hello, world!h1
+    
+    bYour name b input type=text id=namefield
+    
+    button id=submitbutton type=buttonSubmit to server!button
+    
+    p id=outputp
+  
+    br 
+
+    p
+     This is a basic JSON RPC call to OpenCPU. We use ttr_fun_jsontt from the ttopencpu.jstt library to call the R function called tthellott included in this R package. 
+    p
+    
+    pHave a look at the HTML source code! Some things to noticep
+    ul
+      liWe can always see the source code of the R function using the API, e.g a href=..Rhelloherea.li
+      liIf the R function has a manual page, it we can find it a href=..manhellohereali
+      liWhen the name field is empty, the R function raises an error. Notice how we deal with this in javascript.li
+    ul
+    
+  body
+html
